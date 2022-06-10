@@ -18,9 +18,9 @@ using docker to deploy chromedp/headless-shell,and add suport for chinese(instal
 ### pull pre-build image and run
 
     ```bash
-    docker pull registry.cn-hangzhou.aliyuncs.com/programnotes/chromedp-headless-shell-suport-chinese:v1.0
+    docker pull registry.cn-hangzhou.aliyuncs.com/programnotes/chromedp-headless-shell-suport-chinese:v1.2
 
-    docker run -d registry.cn-hangzhou.aliyuncs.com/programnotes/chromedp-headless-shell-suport-chinese:v1.0
+    docker run -d registry.cn-hangzhou.aliyuncs.com/programnotes/chromedp-headless-shell-suport-chinese:v1.2
     ```
 
 ### test
