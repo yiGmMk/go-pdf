@@ -1,7 +1,8 @@
 # chromedp-headless-shell-suport-chinese
 
-    using docker to deploy chromedp/headless-shell,and add suport for chinese(install fonts,using mirror etc.)
-when all dependencies installed,you can run the following command to try generating pdf using our pre-build app
+    using docker to deploy chromedp/headless-shell,and add suport for chinese(install
+fonts,using mirror etc.)when all dependencies installed,you can run the following command
+to try generating pdf using our pre-build app.
 
     ```bash
     when using linux
