@@ -1,6 +1,7 @@
 package chromedptool
 
 import (
+	"log"
 	"os"
 	"testing"
 )
@@ -8,8 +9,16 @@ import (
 func TestPrintf(t *testing.T) {
 	path := "./baidu.pdf"
 	defer os.RemoveAll(path)
+	h := ChromedpHandler{}
 
-	err := ChromedpHandler{}.GenPdf("https://baidu.com", path)
+	url, err := h.GetConnUrl()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Println(url)
+
+	err = h.GenPdf("https://baidu.com", path)
 	if err != nil {
 		t.Error(err)
 	}
