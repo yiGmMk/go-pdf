@@ -20,7 +20,8 @@ using docker to deploy chromedp/headless-shell,and add suport for chinese(instal
     ```bash
     docker pull registry.cn-hangzhou.aliyuncs.com/programnotes/chromedp-headless-shell-suport-chinese:v1.2
 
-    docker run -d registry.cn-hangzhou.aliyuncs.com/programnotes/chromedp-headless-shell-suport-chinese:v1.2
+    # run container using script
+    bash run-pull-container.sh
     ```
 
 ### test
