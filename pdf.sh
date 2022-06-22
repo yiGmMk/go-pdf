@@ -9,13 +9,30 @@ sh_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 container=headless-shell_zh
 echo checking $container
 
+# 查询docker镜像是否存在
+checkIfImageExists() {
+    docker images | grep -q $container
+    if [ $? -eq 0 ]; then
+        echo "Image $container exists"
+        return 0
+    else
+        echo "Image $container does not exist"
+        return 1
+    fi
+}
 searched=$(docker ps | grep $container | grep -v grep | awk '{print $2}')
 if [ "$searched" != "$container" ]; then
     echo "docker ps result: " $searched
     echo "pdf container:$container not exist, now  build and run"
     docker stop $container
-    # 构建镜像,运行
-    docker build -t headless-shell_zh $sh_dir
+    # 没有则构建镜像,运行
+    if checkIfImageExists; then
+        echo "Image $container exists"
+    else
+        echo "Image $container does not exist"
+        docker build -t headless-shell_zh $sh_dir
+    fi
+
     docker run -d -p 9222:9222 --rm --name $container --shm-size 2G $container
 
     #删除镜像 -f 强制删除
