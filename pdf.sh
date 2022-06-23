@@ -23,13 +23,12 @@ checkIfImageExists() {
 searched=$(docker ps | grep $container | grep -v grep | awk '{print $2}')
 if [ "$searched" != "$container" ]; then
     echo "docker ps result: " $searched
-    echo "pdf container:$container not exist, now  build and run"
     docker stop $container
     # 没有则构建镜像,运行
     if checkIfImageExists; then
         echo "Image $container exists"
     else
-        echo "Image $container does not exist"
+        echo "Docker Image $container does not exist, now  build and run"
         docker build -t headless-shell_zh $sh_dir
     fi
 
