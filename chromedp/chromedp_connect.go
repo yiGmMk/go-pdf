@@ -78,7 +78,11 @@ func (c ChromedpHandler) GenPdf(printUrl, outputPdfFilePath string) error {
 	ctx, cancel := chromedp.NewRemoteAllocator(ctxTime, connectUrl.WebSocketDebuggerUrl)
 	defer cancel()
 	ctx1, cancel1 := chromedp.NewContext(ctx)
-	defer cancel1()
+	defer func() {
+		cancel1()
+		_ = chromedp.Cancel(ctx1) // cancel to release resource (a tab in browser)
+	}()
+
 	chromedp.Env("TZ=" + "Asia/Shanghai")
 	var buf []byte
 	err = chromedp.Run(ctx1, chromedp.Tasks{
@@ -98,5 +102,8 @@ func (c ChromedpHandler) GenPdf(printUrl, outputPdfFilePath string) error {
 	}
 
 	err = ioutil.WriteFile(outputPdfFilePath, buf, 0666)
-	return errors.Wrapf(err, "write to file failed")
+	if err != nil {
+		return errors.Wrapf(err, "write to file failed")
+	}
+	return nil
 }

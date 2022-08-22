@@ -32,7 +32,7 @@ if [ "$searched" != "$container" ]; then
         docker build -t headless-shell_zh $sh_dir
     fi
 
-    docker run -d -p 9222:9222 --rm --name $container --shm-size 2G $container
+    docker run -d -p 9222:9222 --rm --name $container --shm-size 1G $container
 
     #删除镜像 -f 强制删除
     #docker rmi -f headless-shell_zh
