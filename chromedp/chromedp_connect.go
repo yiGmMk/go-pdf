@@ -2,7 +2,7 @@ package chromedptool
 
 import (
 	"context"
-	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/chromedp/cdproto/page"
@@ -101,7 +101,7 @@ func (c ChromedpHandler) GenPdf(printUrl, outputPdfFilePath string) error {
 		return errors.Wrapf(err, "chromedp Run failed")
 	}
 
-	err = ioutil.WriteFile(outputPdfFilePath, buf, 0666)
+	err = os.WriteFile(outputPdfFilePath, buf, 0666)
 	if err != nil {
 		return errors.Wrapf(err, "write to file failed")
 	}

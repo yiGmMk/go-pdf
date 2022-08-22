@@ -8,7 +8,10 @@ import (
 
 func TestPrintf(t *testing.T) {
 	path := "./baidu.pdf"
-	defer os.RemoveAll(path)
+	defer func() {
+		_ = os.RemoveAll(path)
+	}()
+
 	h := ChromedpHandler{}
 
 	url, err := h.GetConnUrl()
