@@ -147,7 +147,7 @@ func (pf ChromedpHandler) Clear(res []ChromedpConnParam) {
 	}
 
 	defer func() {
-		chromedp.Cancel(ctx1)
+		_ = chromedp.Cancel(ctx1)
 		cancel1()
 	}()
 }
