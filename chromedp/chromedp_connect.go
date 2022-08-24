@@ -11,6 +11,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+const (
+	_blank = "about:blank"
+)
+
 // "description": "",
 // "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/E8CB7F8AAB1FF9ECB2D76C5363C6FE7A",
 // "id": "E8CB7F8AAB1FF9ECB2D76C5363C6FE7A",
@@ -56,7 +60,8 @@ func (c ChromedpHandler) GetConnUrl(urls ...string) (*ChromedpConnParam, error) 
 	if len(res) <= 0 {
 		return nil, errors.New("cannot find conn url")
 	}
-	connParam := res[0]
+	connParam := res[len(res)-1]
+	go c.Clear(res)
 	return &connParam, nil
 }
 
@@ -106,4 +111,43 @@ func (c ChromedpHandler) GenPdf(printUrl, outputPdfFilePath string) error {
 		return errors.Wrapf(err, "write to file failed")
 	}
 	return nil
+}
+
+/** release resource(page etc.) that not need any more,except the blank page
+ * @description: 清理资源,仅保留最后一个blank的标签页,其他标签页全部关闭
+ * @param {[]ChromedpConnParam} res 资源数据,通过id可以关闭
+ * @return {*}
+ */
+func (pf ChromedpHandler) Clear(res []ChromedpConnParam) {
+	if len(res) <= 1 {
+		return
+	}
+	ctx, cancel := chromedp.NewRemoteAllocator(context.Background(), res[len(res)-1].WebSocketDebuggerUrl)
+	defer cancel()
+	ctx1, cancel1 := chromedp.NewContext(ctx)
+
+	ts, err := chromedp.Targets(ctx1)
+	if err != nil {
+		return
+	}
+
+	hasBlank := false
+	for _, info := range ts {
+		if info.Attached {
+			continue
+		}
+		if info.Title == _blank && !hasBlank { // 保留一个空白标签页
+			hasBlank = true
+			continue
+		}
+
+		newCtx, newCancel := chromedp.NewContext(ctx, chromedp.WithTargetID(info.TargetID))
+		_ = chromedp.Run(newCtx, page.Close())
+		newCancel()
+	}
+
+	defer func() {
+		chromedp.Cancel(ctx1)
+		cancel1()
+	}()
 }
