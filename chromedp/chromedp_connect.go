@@ -117,6 +117,7 @@ func (c ChromedpHandler) GenPdf(printUrl, outputPdfFilePath string) error {
  * @description: 清理资源,仅保留最后一个blank的标签页,其他标签页全部关闭
  * @param {[]ChromedpConnParam} res 资源数据,通过id可以关闭
  * @return {*}
+ * 参考: https://github.com/chromedp/chromedp/issues/1096
  */
 func (pf ChromedpHandler) Clear(res []ChromedpConnParam) {
 	if len(res) <= 1 {
